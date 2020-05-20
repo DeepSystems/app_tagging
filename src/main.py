@@ -51,7 +51,6 @@ def main():
     payload[DATA] = data
     payload[STATE] = {
         "category": default_category,
-        #"item": default_item
     }
 
     #http://192.168.1.42/apps/2/sessions/75
