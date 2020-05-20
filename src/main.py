@@ -22,7 +22,11 @@ def read_items_csv(path):
     items = []
     with open(path, mode='r') as csv_file:
         csv_reader = csv.DictReader(csv_file)
-        for row in csv_reader:
+        for idx, row in enumerate(csv_reader):
+            if idx % 2 == 0:
+                row['images'] = ["https://i.imgur.com/qb32PBI.jpg", "https://i.imgur.com/qb32PBI.jpg"]
+            else:
+                row['images'] = ["https://i.imgur.com/qH2xfxH.jpg", "https://i.imgur.com/qH2xfxH.jpg", "https://i.imgur.com/qH2xfxH.jpg"]
             items.append(row)
             categories.add(row["category"])
             category_items[row["category"]].append(row)
@@ -44,16 +48,17 @@ def main():
     data["items"] = category_items
 
     default_category = data["categories"][0]
-    default_item = category_items[default_category][0]["name"]
 
     payload = {}
     payload[TEMPLATE] = gui_template
     payload[DATA] = data
     payload[STATE] = {
         "category": default_category,
+        "item": 0
     }
 
     #http://192.168.1.42/apps/2/sessions/75
+    #http://192.168.1.42/app/images/1/9/28/35?page=1&sessionId=75#image-31872
     jresp = api.task.set_data(task_id, payload)
 
 
