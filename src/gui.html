@@ -1,0 +1,29 @@
+<div>
+    <sly-field class="mt10" title="Category">
+        <el-select class="mt10" v-model="state.category" filterable placeholder="Select">
+            <el-option
+              v-for="item in data.categories"
+              :key="item"
+              :label="item"
+              :value="item">
+            </el-option>
+        </el-select>
+    </sly-field>
+
+    <sly-field class="mt10" title="Item">
+        <el-select class="mt10" v-model="state.item" filterable placeholder="Select">
+            <el-option
+              v-for="item in data.items[state.category]"
+              :key="item.name"
+              :label="item.name"
+              :value="item.name">
+                <div>
+                    <span style="float: left">{{ item.name }}</span>
+                    <span style="float: right; font-size: 13px">{{ item.brand }}</span>
+                    <span style="float: bottom; font-size: 13px">{{ item.description }}</span>
+                </div>
+            </el-option>
+        </el-select>
+    </sly-field>
+
+</div>
