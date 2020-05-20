@@ -16,10 +16,10 @@
               v-for="item in data.items[state.category]"
               :key="item.id"
               :label="item.name"
-              :value="item.name">
+              :value="item.id">
                 <div>
                     <span style="float: left">{{ item.name }}</span>
-                    <span style="float: right; padding-left: 10px; opacity: 0.8; font-size: 13px">{{ item.brand }}</span>
+                    <span style="float: right; padding-left: 25px; opacity: 0.8; font-size: 13px">{{ item.brand }}</span>
                 </div>
             </el-option>
         </el-select>
