@@ -1,6 +1,6 @@
 <div>
     <sly-field class="mt10" title="Category">
-        <el-select class="mt10" v-model="state.category" filterable placeholder="Select">
+        <el-select class="mt10" v-model="state.category" @change='state.item=""' filterable placeholder="Select">
             <el-option
               v-for="item in data.categories"
               :key="item"
@@ -14,13 +14,12 @@
         <el-select class="mt10" v-model="state.item" filterable placeholder="Select">
             <el-option
               v-for="item in data.items[state.category]"
-              :key="item.name"
+              :key="item.id"
               :label="item.name"
               :value="item.name">
                 <div>
                     <span style="float: left">{{ item.name }}</span>
-                    <span style="float: right; font-size: 13px">{{ item.brand }}</span>
-                    <span style="float: bottom; font-size: 13px">{{ item.description }}</span>
+                    <span style="float: right; padding-left: 10px; opacity: 0.8; font-size: 13px">{{ item.brand }}</span>
                 </div>
             </el-option>
         </el-select>

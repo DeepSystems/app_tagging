@@ -1,7 +1,7 @@
-id,category,brand,name,description
-1,ketchup,LaConstancia,Salsa de tomate,aaa description
-2,combo,LaConstancia,Offer: ketchup + mustard,bbb description
-3,ketchup,LaConstancia,Salsa de tomate Light,ccc description
-4,ketchup,California,Salsa de tomate,eee description
-5,mayonnaise,San Jorge,Mayonesa,xxx description
-6,mayonnaise,Fruco,Mayonesa,yyy description
+id,category,brand,name
+1,ketchup,LaConstancia,Salsa de tomate
+2,combo,LaConstancia,Offer: ketchup + mustard
+3,ketchup,LaConstancia,Salsa de tomate Light
+4,ketchup,California,Salsa de tomate
+5,mayonnaise,San Jorge,Mayonesa
+6,mayonnaise,Fruco,Mayonesa
