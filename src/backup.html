@@ -1,0 +1,90 @@
+<!--<div>-->
+    <!--<el-tabs type="border-card">-->
+      <!--<el-tab-pane label="Project Settings">Settings</el-tab-pane>-->
+      <!--<el-tab-pane label="Tagging">Tagging</el-tab-pane>-->
+      <!--<el-tab-pane label="Role">Role</el-tab-pane>-->
+      <!--<el-tab-pane label="Statistics">Task</el-tab-pane>-->
+    <!--</el-tabs>-->
+
+    <!--<card class="mt15" title="Progress">-->
+        <!--<div>Total images</div>-->
+        <!--<div>Processed images</div>-->
+    <!--</card>-->
+
+    <!--<el-row :gutter="20">-->
+        <!--<el-col :span="10">-->
+            <!--<sly-field title="Item to tag" description="Select product from table and press TAG button">-->
+                <!--<sly-gallery height="300px" :content="data.productExamples"/>-->
+            <!--</sly-field>-->
+        <!--</el-col>-->
+        <!--<el-col :span="10">-->
+            <!--<sly-field title="Examples for selected product"  description="Compare item with these examples before tagging">-->
+                <!--<sly-gallery height="300px" :content="data.productExamples"/>-->
+            <!--</sly-field>-->
+        <!--</el-col>-->
+        <!--<el-col :span="4">-->
+            <!--<card class="mt15" title="Debug state"><pre>{{state}}</pre></card>-->
+        <!--</el-col>-->
+    <!--</el-row>-->
+
+    <!--<el-row>-->
+        <!--<el-col :span="24">-->
+            <!--<sly-field title="Products catalogue">-->
+                <!--<sly-table :options="{ perPage: state.perPage, pageSizes: state.pageSizes }" :content="data.table" v-model="state.table"></sly-table>-->
+            <!--</sly-field>-->
+        <!--</el-col>-->
+    <!--</el-row>-->
+
+
+
+
+
+
+    <!--<card class="mt15" title="Debug state"><pre>{{state}}</pre></card>-->
+
+    <!--&lt;!&ndash;<sly-gallery :content="data.images[state.currentRow]"/>&ndash;&gt;-->
+
+    <!--&lt;!&ndash;&lt;!&ndash;class="mt10" &ndash;&gt;&ndash;&gt;-->
+    <!--&lt;!&ndash;&lt;!&ndash;data.items[$event][0].id&ndash;&gt;&ndash;&gt;-->
+    <!--&lt;!&ndash;<sly-field title="Category" style="padding-left: 10px; padding-right: 10px">&ndash;&gt;-->
+        <!--&lt;!&ndash;<el-select v-model="state.category" @change="state.item=0" filterable placeholder="Select">&ndash;&gt;-->
+            <!--&lt;!&ndash;<el-option&ndash;&gt;-->
+              <!--&lt;!&ndash;v-for="item in data.categories"&ndash;&gt;-->
+              <!--&lt;!&ndash;:key="item"&ndash;&gt;-->
+              <!--&lt;!&ndash;:label="item"&ndash;&gt;-->
+              <!--&lt;!&ndash;:value="item">&ndash;&gt;-->
+            <!--&lt;!&ndash;</el-option>&ndash;&gt;-->
+        <!--&lt;!&ndash;</el-select>&ndash;&gt;-->
+    <!--&lt;!&ndash;</sly-field>&ndash;&gt;-->
+
+    <!--&lt;!&ndash;&lt;!&ndash;class="mt10"&ndash;&gt;&ndash;&gt;-->
+    <!--&lt;!&ndash;<sly-field title="Item" style="padding-left: 10px; padding-right: 10px">&ndash;&gt;-->
+        <!--&lt;!&ndash;<el-select v-model="state.item" filterable placeholder="Select">&ndash;&gt;-->
+            <!--&lt;!&ndash;<el-option&ndash;&gt;-->
+              <!--&lt;!&ndash;v-for="(item, idx) in data.items[state.category]"&ndash;&gt;-->
+              <!--&lt;!&ndash;:key="item.id"&ndash;&gt;-->
+              <!--&lt;!&ndash;:label="item.name"&ndash;&gt;-->
+              <!--&lt;!&ndash;:value="idx">&ndash;&gt;-->
+                <!--&lt;!&ndash;<div>&ndash;&gt;-->
+                    <!--&lt;!&ndash;<span style="float: left">{{ item.name }}</span>&ndash;&gt;-->
+                    <!--&lt;!&ndash;<span style="float: right; padding-left: 25px; opacity: 0.8; font-size: 13px">{{ item.brand }}</span>&ndash;&gt;-->
+                <!--&lt;!&ndash;</div>&ndash;&gt;-->
+            <!--&lt;!&ndash;</el-option>&ndash;&gt;-->
+        <!--&lt;!&ndash;</el-select>&ndash;&gt;-->
+    <!--&lt;!&ndash;</sly-field>&ndash;&gt;-->
+
+    <!--&lt;!&ndash;&lt;!&ndash;object-fit: cover;&ndash;&gt;&ndash;&gt;-->
+    <!--&lt;!&ndash;<div class="mb15 ml10" style="display: grid; grid-template: 100px / repeat(5, .2fr); grid-gap: 10px;">&ndash;&gt;-->
+        <!--&lt;!&ndash;<img v-for="img in data.items[state.category][state.item].images"&ndash;&gt;-->
+             <!--&lt;!&ndash;:src="img"&ndash;&gt;-->
+             <!--&lt;!&ndash;style="width: 100%; height: 100%; object-fit: cover;"&ndash;&gt;-->
+        <!--&lt;!&ndash;/>&ndash;&gt;-->
+    <!--&lt;!&ndash;</div>&ndash;&gt;-->
+
+
+    <!--&lt;!&ndash;&lt;!&ndash;https://i.imgur.com/qb32PBI.jpg&ndash;&gt;&ndash;&gt;-->
+
+    <!--&lt;!&ndash;<el-button :disabled="context.figureId === null" type="primary">Attach</el-button>&ndash;&gt;-->
+    <!--&lt;!&ndash;<el-button type="button">Click me</el-button>&ndash;&gt;-->
+    <!--&lt;!&ndash;&lt;!&ndash;<pre>{{context}}</pre>&ndash;&gt;&ndash;&gt;-->
+<!--</div>-->

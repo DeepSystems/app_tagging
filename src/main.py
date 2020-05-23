@@ -2,11 +2,11 @@ import os
 import json
 import html
 import time
+
 import csv
 from collections import defaultdict
 import supervisely_lib as sly
-import constants as const
-
+import utils
 
 ITEMS_PATH = "/workdir/src/items.csv"
 
@@ -22,20 +22,28 @@ def read_items_csv(path):
         for idx, row in enumerate(csv_reader):
             products.append(row)
     #@TODO: table freezes page (110k)
-    #products = products[:1000]
+    products = products[:1000]
     sly.logger.info("items count:", extra={"count": len(products)})
 
     return products
 
 
 def main():
-    products = read_items_csv(ITEMS_PATH)
+    products = []#read_items_csv(ITEMS_PATH)
 
     task_id = int(os.getenv("TASK_ID"))
-    print(task_id)
     api = sly.Api.from_env()
     api.add_additional_field('taskId', task_id)
     api.add_header('x-task-id', str(task_id))
+
+    #context = api.task.get_data(task_id, sly.app.CONTEXT)
+    #user_id = context["userId"]
+
+    project_id = 28 # get from context menu somehow
+    #session_path = "/shared_data/app_tagging/{}".format(project_id)
+
+    #utils.init_project(api, project_id, session_path)
+
 
     with open('/workdir/src/gui.html', 'r') as file:
         gui_template = file.read()
@@ -46,13 +54,16 @@ def main():
         "productExamples": []
     }
 
+
     #state
     state = {
-        "projectId": 28,
+        "projectId": project_id,
         "perPage": 20,
         "pageSizes": [10, 15, 20, 50, 100],
         "table": {},
     }
+
+
 
     # data = {}
     # data["categories"] = list(categories)
@@ -61,9 +72,9 @@ def main():
     # #default_category = data["categories"][0]
 
     payload = {
-        const.TEMPLATE: gui_template,
-        const.STATE: state,
-        const.DATA: data,
+        sly.app.TEMPLATE: gui_template,
+        sly.app.STATE: state,
+        sly.app.DATA: data,
     }
 
     #http://192.168.1.42/apps/2/sessions/75

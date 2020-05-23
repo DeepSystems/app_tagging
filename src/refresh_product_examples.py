@@ -13,6 +13,8 @@ state = api.task.get_data(task_id, field=const.STATE)
 
 selected_product = state["table"].get("selectedRowData", None)
 
+#@TODO: add to galerry fit image to size
+
 # read urls from file of from task_id.data
 urls_db = [["https://i.imgur.com/x1l0qca.jpg"],
            ["https://i.imgur.com/YbWG8xE.jpg"],
@@ -21,7 +23,7 @@ urls_db = [["https://i.imgur.com/x1l0qca.jpg"],
            ["https://i.imgur.com/Yq4lYa0.jpg"]]
 
 urls = []
-cnt_images = randint(0, 5)
+cnt_images = randint(2, 5)
 for i in range(cnt_images):
     urls.append(urls_db[randint(0, len(urls_db) - 1)])
 
