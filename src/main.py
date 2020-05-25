@@ -63,9 +63,14 @@ def main():
               "https://i.imgur.com/NYv2mml.jpg", "https://i.imgur.com/CnzYGbQ.jpg",
               "https://i.imgur.com/Yq4lYa0.jpg"]
 
+
     img_grid = []
+    candidates = []
     for img_url in images:
         img_grid.append({"url": img_url, "label": sly.rand_str(65)})
+        candidate = [[img_url], [img_url]]
+        candidates.append(candidate)
+
 
     keywords = []
     words = ["Alabama", "Alaska", "Arizona",
@@ -95,7 +100,13 @@ def main():
         "objectToTag": [["https://i.imgur.com/x1l0qca.jpg"], ["https://i.imgur.com/YbWG8xE.jpg"]],
         "itemExamples": [["https://i.imgur.com/NYv2mml.jpg"], ["https://i.imgur.com/CnzYGbQ.jpg"], ["https://i.imgur.com/Yq4lYa0.jpg"]],
         "imagesGrid": img_grid,
-        "keywords": keywords
+        "keywords": keywords,
+        "imagesCandidates": candidates,
+        "gridData": [{ "date": '2016-05-02', "name": 'Jack', "address": 'New York City' },
+                     { "date": '2016-05-04', "name": 'Jack', "address": 'New York City' },
+                     { "date": '2016-05-01', "name": 'Jack', "address": 'New York City' },
+                     { "date": '2016-05-03', "name": 'Jack', "address": 'New York City' },
+                    ]
     }
 
     #state

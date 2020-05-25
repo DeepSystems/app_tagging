@@ -4,9 +4,10 @@
         <el-col :span="8">
             <card style="margin-bottom:10px;" title="Item to tag" subtitle="Find product item for this image">
                 <sly-gallery height="200px" :content="data.objectToTag"/>
+                <div slot="header" class="fflex"> <el-button icon="circle-check" size="small">Tag</el-button></div>
             </card>
             <card style="margin-bottom:10px;" title="Candidate product" subtitle="Images of selected candidate product">
-                <sly-gallery height="200px" :content="data.itemExamples"/>
+                <sly-gallery height="200px" :content="data.imagesCandidates[state.selectedImageIndex]"/>
             </card>
         </el-col>
         <el-col :span="16">
@@ -28,13 +29,30 @@
                   <el-tab-pane label="Thumbnails">
                       <el-row>
                           <!--@#TODO: calc height here-->
-                          <div style="max-height: 550px; overflow: auto;">
-                            <div style="float: left; margin: 10px; width: 200px; border: 1px solid transparent;"
-                                 :style="{ borderColor: state.selectedImageIndex === index ? 'red' : 'transparent' }" v-for="(item, index) in data.imagesGrid">
-                                <img style="display: block; width: 100%; height: 150px; object-fit: contain; background: #DCDCDC;" :src="item.url" @click="state.selectedImageIndex = index" />
-                                <!--<div style="text-align:center; word-wrap:break-word;">{{ item.label }}</div>-->
-                                <div v-if="item.label.length >= 15" style="text-align:center; word-wrap:break-word;">{{ item.label.substring(0,15)+".." }}</div>
-                            </div>
+                          <div style="max-height: 515px; overflow: auto;">
+                                <el-popover
+                                  ref="popover4"
+                                  placement="right"
+                                  trigger="click"
+                                  width="400">
+                                  <el-table :data="data.gridData">
+                                    <el-table-column width="150" property="date" label="date"></el-table-column>
+                                    <el-table-column width="100" property="name" label="name"></el-table-column>
+                                    <el-table-column width="300" property="address" label="address"></el-table-column>
+                                  </el-table>
+                                </el-popover>
+
+                                <div style="float: left; margin: 1px; width: 200px; border: 3px solid transparent;"
+                                     v-popover:popover4
+                                     :style="{ borderColor: state.selectedImageIndex === index ? '#20A0FF' : 'transparent' }" v-for="(item, index) in data.imagesGrid">
+                                    <img style="display: block; width: 100%; height: 150px; object-fit: contain; background: #DCDCDC;"
+                                         :src="item.url"
+                                         @click="state.selectedImageIndex = index"
+                                    />
+                                    <div v-if="item.label.length >= 15" style="text-align:center; word-wrap:break-word;">{{ item.label.substring(0,15)+".." }}</div>
+                                </div>
+
+
                           </div>
                       </el-row>
                   </el-tab-pane>
