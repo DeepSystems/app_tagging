@@ -22,7 +22,7 @@ def read_items_csv(path):
         for idx, row in enumerate(csv_reader):
             products.append(row)
     #@TODO: table freezes page (110k)
-    products = products[:1000]
+    products = products[:100]
     sly.logger.info("items count:", extra={"count": len(products)})
 
     return products
