@@ -1,59 +1,52 @@
+<div>
+
+    <el-row :gutter="10">
+        <el-col :span="8">
+            <card style="margin-bottom:15px;" title="Item to tag" subtitle="Find product item for this image">
+                <sly-gallery height="300px" :content="data.objectToTag"/>
+            </card>
+            <card style="margin-bottom:15px;" title="Candidate product" subtitle="Images of selected candidate product">
+                <sly-gallery height="300px" :content="data.itemExamples"/>
+            </card>
+        </el-col>
+        <el-col :span="16">
+            <el-row>
+                <el-select
+                    v-model="state.selectedKeywords" multiple filterable placeholder="Please enter a keyword" style="width: 100%; margin-bottom: 15px;">
+                    <el-option
+                      v-for="item in data.keywords"
+                      :key="item.value"
+                      :label="item.value"
+                      :value="item.value">
+                    </el-option>
+                </el-select>
+
+                <el-button icon="search"></el-button>
+            </el-row>
+
+            <el-tabs type="border-card">
+              <el-tab-pane label="Thumbnails">
+                  <el-row>
+                      <div>
+                        <div style="float: left; margin: 10px; width: 200px; border: 1px solid none;"
+                             :style="{ borderColor: state.selectedImageIndex === index ? 'red' : 'none' }" v-for="(item, index) in data.imagesGrid">
+                            <img style="display: block; width: 100%; height: 150px; object-fit: contain; background: #DCDCDC;" :src="item.url" @click="state.selectedImageIndex = index" />
+                            <!--<div style="text-align:center; word-wrap:break-word;">{{ item.label }}</div>-->
+                            <div v-if="item.label.length >= 15" style="text-align:center; word-wrap:break-word;">{{ item.label.substring(0,15)+".." }}</div>
+                        </div>
+                      </div>
+                  </el-row>
+              </el-tab-pane>
+              <el-tab-pane label="Table">
+                  <sly-table :options="{ perPage: state.perPage, pageSizes: state.pageSizes }" :content="data.table" v-model="state.table"></sly-table>
+              </el-tab-pane>
+              <el-tab-pane label="Statistics">General + Per user stats</el-tab-pane>
+            </el-tabs>
+        </el-col>
+    </el-row>
 
 
-<input id="imageId" type="image" src="http://goo.gl/UohAz" onclick="mark(this)"/>
-
-<script>
-function myFunction() {
-  document.getElementById("demo").style.color = "red";
-}
-</script>
-
-<!--<div style="display: grid; grid-gap: 10px; grid-template-columns: repeat(auto-fill, minmax(200px, 0.25fr));">-->
-    <!--<div style="display: flex; flex-direction: column;" v-for="item in data.imagesGrid">-->
-        <!--<img style="display: block; flex: 1" :src="item.url" />-->
-        <!--<div>{{ item.label }}</div>-->
-    <!--</div>-->
-<!--</div>-->
-
-<!--<div style="display: grid; grid-template-columns: repeat(3, 1fr); grid-gap: 10px;">-->
-    <!--<div style="display: flex; flex-direction: column;" v-for="item in data.imagesGrid">-->
-        <!--<img style="display: flex;" :src="item.url" />-->
-        <!--<div>{{ item.label }}</div>-->
-    <!--</div>-->
-<!--</div>-->
-
-<!--<div>-->
-    <!--<el-tabs type="border-card">-->
-        <!--<el-tab-pane label="Labeling">-->
-            <!--<el-row :gutter="20">-->
-                <!--<el-col :span="12">-->
-                    <!--<sly-field title="Add tag to this object" description="Find the right item from database and attach it to this object">-->
-                        <!--<sly-gallery height="300px" :content="data.objectToTag"/>-->
-                    <!--</sly-field>-->
-                <!--</el-col>-->
-
-                <!--&lt;!&ndash;<el-col :span="4">&ndash;&gt;-->
-                    <!--&lt;!&ndash;<pre>{{state}}</pre>&ndash;&gt;-->
-                    <!--&lt;!&ndash;<el-button type="primary" icon="arrow-left">Tag</el-button>&ndash;&gt;-->
-                <!--&lt;!&ndash;</el-col>&ndash;&gt;-->
-
-                <!--<el-col :span="12">-->
-                    <!--<sly-field title="Candidate examples"  description="Images from database for selected item">-->
-                        <!--<sly-gallery height="300px" :content="data.itemExamples"/>-->
-                    <!--</sly-field>-->
-                <!--</el-col>-->
-            <!--</el-row>-->
-
-            <!--<hr class="mb15" style="height: 1px; color: #e0e0e0; background-color: #e0e0e0; border: none;"/>-->
-
-            <!--<sly-field title="Items database" description="Click on the row to see item images">-->
-                <!--<sly-table :options="{ perPage: state.perPage, pageSizes: state.pageSizes }" :content="data.table" v-model="state.table"></sly-table>-->
-            <!--</sly-field>-->
-
-        <!--</el-tab-pane>-->
-
-        <!--<el-tab-pane label="Statistics">Statistics</el-tab-pane>-->
-    <!--</el-tabs>-->
-
-    <!--<card class="mt15" title="Debug state"><pre>{{state}}</pre></card>-->
-<!--</div>-->
+    <el-row>
+        <card class="mt15" title="Debug state"><pre>{{state}}</pre></card>
+    </el-row>
+</div>

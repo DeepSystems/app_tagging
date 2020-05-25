@@ -50,18 +50,52 @@ def main():
 
     images = ["https://i.imgur.com/x1l0qca.jpg", "https://i.imgur.com/YbWG8xE.jpg",
               "https://i.imgur.com/NYv2mml.jpg", "https://i.imgur.com/CnzYGbQ.jpg",
+              "https://i.imgur.com/NYv2mml.jpg", "https://i.imgur.com/CnzYGbQ.jpg",
+              "https://i.imgur.com/x1l0qca.jpg", "https://i.imgur.com/YbWG8xE.jpg",
+              "https://i.imgur.com/x1l0qca.jpg", "https://i.imgur.com/YbWG8xE.jpg",
+              "https://i.imgur.com/x1l0qca.jpg", "https://i.imgur.com/YbWG8xE.jpg",
+              "https://i.imgur.com/NYv2mml.jpg", "https://i.imgur.com/CnzYGbQ.jpg",
+              "https://i.imgur.com/NYv2mml.jpg", "https://i.imgur.com/CnzYGbQ.jpg",
+              "https://i.imgur.com/x1l0qca.jpg", "https://i.imgur.com/YbWG8xE.jpg",
+              "https://i.imgur.com/x1l0qca.jpg", "https://i.imgur.com/YbWG8xE.jpg",
+              "https://i.imgur.com/x1l0qca.jpg", "https://i.imgur.com/YbWG8xE.jpg",
+              "https://i.imgur.com/NYv2mml.jpg", "https://i.imgur.com/CnzYGbQ.jpg",
+              "https://i.imgur.com/NYv2mml.jpg", "https://i.imgur.com/CnzYGbQ.jpg",
               "https://i.imgur.com/Yq4lYa0.jpg"]
 
     img_grid = []
     for img_url in images:
-        img_grid.append({"url": img_url, "label": sly.rand_str(15)})
+        img_grid.append({"url": img_url, "label": sly.rand_str(65)})
+
+    keywords = []
+    words = ["Alabama", "Alaska", "Arizona",
+        "Arkansas", "California", "Colorado",
+        "Connecticut", "Delaware", "Florida",
+        "Georgia", "Hawaii", "Idaho", "Illinois",
+        "Indiana", "Iowa", "Kansas", "Kentucky",
+        "Louisiana", "Maine", "Maryland",
+        "Massachusetts", "Michigan", "Minnesota",
+        "Mississippi", "Missouri", "Montana",
+        "Nebraska", "Nevada", "New Hampshire",
+        "New Jersey", "New Mexico", "New York",
+        "North Carolina", "North Dakota", "Ohio",
+        "Oklahoma", "Oregon", "Pennsylvania",
+        "Rhode Island", "South Carolina",
+        "South Dakota", "Tennessee", "Texas",
+        "Utah", "Vermont", "Virginia",
+        "Washington", "West Virginia", "Wisconsin",
+        "Wyoming"]
+    for word in words:
+        keywords.append({"value": word})#{"value": word, "label": word, "key": word})
+
 
     #data
     data = {
         "table": products,
         "objectToTag": [["https://i.imgur.com/x1l0qca.jpg"], ["https://i.imgur.com/YbWG8xE.jpg"]],
         "itemExamples": [["https://i.imgur.com/NYv2mml.jpg"], ["https://i.imgur.com/CnzYGbQ.jpg"], ["https://i.imgur.com/Yq4lYa0.jpg"]],
-        "imagesGrid": img_grid
+        "imagesGrid": img_grid,
+        "keywords": keywords
     }
 
     #state
@@ -70,6 +104,9 @@ def main():
         "perPage": 20,
         "pageSizes": [10, 15, 20, 50, 100],
         "table": {},
+        "selectedImageIndex": 0,
+        "selectedKeywords": []
+
     }
 
     payload = {
