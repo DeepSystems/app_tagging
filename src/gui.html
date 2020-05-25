@@ -2,19 +2,34 @@
     <el-tabs type="border-card">
         <el-tab-pane label="Labeling">
             <el-row :gutter="20">
-                <el-col :span="10">
-                    <sly-field title="Object to tag" description="Object without tag">
-                        <sly-gallery height="300px" :content="data.productExamples"/>
+                <el-col :span="12">
+                    <sly-field title="Add tag to this object" description="Find the right item from database and attach it to this object">
+                        <sly-gallery height="300px" :content="data.objectToTag"/>
                     </sly-field>
                 </el-col>
-                <el-col :span="10">
-                    <sly-field title="Item examples"  description="Images from database for selected item">
-                        <sly-gallery height="300px" :content="data.productExamples"/>
+
+                <!--<el-col :span="4">-->
+                    <!--<pre>{{state}}</pre>-->
+                    <!--<el-button type="primary" icon="arrow-left">Tag</el-button>-->
+                <!--</el-col>-->
+
+                <el-col :span="12">
+                    <sly-field title="Candidate examples"  description="Images from database for selected item">
+                        <sly-gallery height="300px" :content="data.itemExamples"/>
                     </sly-field>
                 </el-col>
             </el-row>
+
+            <hr class="mb15" style="height: 1px; color: #e0e0e0; background-color: #e0e0e0; border: none;"/>
+
+            <sly-field title="Items database" description="Click on the row to see item images">
+                <sly-table :options="{ perPage: state.perPage, pageSizes: state.pageSizes }" :content="data.table" v-model="state.table"></sly-table>
+            </sly-field>
+
         </el-tab-pane>
 
         <el-tab-pane label="Statistics">Statistics</el-tab-pane>
     </el-tabs>
+
+    <card class="mt15" title="Debug state"><pre>{{state}}</pre></card>
 </div>

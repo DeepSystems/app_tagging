@@ -29,7 +29,7 @@ def read_items_csv(path):
 
 
 def main():
-    products = []#read_items_csv(ITEMS_PATH)
+    products = read_items_csv(ITEMS_PATH)
 
     task_id = int(os.getenv("TASK_ID"))
     api = sly.Api.from_env()
@@ -51,9 +51,10 @@ def main():
     #data
     data = {
         "table": products,
-        "productExamples": []
+        "objectToTag": [["https://i.imgur.com/x1l0qca.jpg"], ["https://i.imgur.com/YbWG8xE.jpg"]],
+        "itemExamples": [["https://i.imgur.com/NYv2mml.jpg"], ["https://i.imgur.com/CnzYGbQ.jpg"], ["https://i.imgur.com/Yq4lYa0.jpg"]],
+        "table": products
     }
-
 
     #state
     state = {
@@ -62,14 +63,6 @@ def main():
         "pageSizes": [10, 15, 20, 50, 100],
         "table": {},
     }
-
-
-
-    # data = {}
-    # data["categories"] = list(categories)
-    # data["items"] = category_items
-    #
-    # #default_category = data["categories"][0]
 
     payload = {
         sly.app.TEMPLATE: gui_template,
