@@ -48,12 +48,20 @@ def main():
     with open('/workdir/src/gui.html', 'r') as file:
         gui_template = file.read()
 
+    images = ["https://i.imgur.com/x1l0qca.jpg", "https://i.imgur.com/YbWG8xE.jpg",
+              "https://i.imgur.com/NYv2mml.jpg", "https://i.imgur.com/CnzYGbQ.jpg",
+              "https://i.imgur.com/Yq4lYa0.jpg"]
+
+    img_grid = []
+    for img_url in images:
+        img_grid.append({"url": img_url, "label": sly.rand_str(15)})
+
     #data
     data = {
         "table": products,
         "objectToTag": [["https://i.imgur.com/x1l0qca.jpg"], ["https://i.imgur.com/YbWG8xE.jpg"]],
         "itemExamples": [["https://i.imgur.com/NYv2mml.jpg"], ["https://i.imgur.com/CnzYGbQ.jpg"], ["https://i.imgur.com/Yq4lYa0.jpg"]],
-        "table": products
+        "imagesGrid": img_grid
     }
 
     #state
