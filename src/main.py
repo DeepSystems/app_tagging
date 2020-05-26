@@ -122,7 +122,7 @@ def main():
 
     project_dir = init_project(api, PROJECT_ID)
 
-    with open('gui.html', 'r') as file:
+    with open(os.path.join(SCRIPT_DIR, 'gui.html'), 'r') as file:
         gui_template = file.read()
 
     img_grid = []
