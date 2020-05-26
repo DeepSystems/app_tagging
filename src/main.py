@@ -57,15 +57,21 @@ def init_project(api: sly.Api, project_id):
 
     product_id = meta.get_tag_meta("product_id")
     if product_id is None:
-        meta.add_tag_meta(sly.TagMeta("project_id", sly.TagValueType.ANY_STRING))
+        meta = meta.add_tag_meta(sly.TagMeta("product_id", sly.TagValueType.ANY_STRING))
 
     category = meta.get_tag_meta("category")
     if category is None:
         meta = meta.add_tag_meta(sly.TagMeta("category", sly.TagValueType.ANY_STRING))
+
     brand = meta.get_tag_meta("brand")
     if brand is None:
         meta = meta.add_tag_meta(sly.TagMeta("brand", sly.TagValueType.ANY_STRING))
-    if category is None or brand is None:
+
+    item_name = meta.get_tag_meta("item_name")
+    if item_name is None:
+        meta = meta.add_tag_meta(sly.TagMeta("item_name", sly.TagValueType.ANY_STRING))
+
+    if product_id is None or category is None or brand is None or item_name is None:
         api.project.update_meta(project_id, meta.to_json())
 
     sly_json.dump_json_file(meta.to_json(), os.path.join(project_dir, "meta.json"))
@@ -92,6 +98,7 @@ def init_project(api: sly.Api, project_id):
                 )
 
     sly_json.dump_json_file(image_label_pairs, os.path.join(project_dir, "image_labels_pairs.json"))
+    sly_json.dump_json_file(list(range(len(image_label_pairs))), os.path.join(project_dir, "free_pairs.json"))
     return project_dir
 
 
@@ -132,14 +139,16 @@ def main():
         "objectToTag": [["https://i.imgur.com/x1l0qca.jpg"], ["https://i.imgur.com/YbWG8xE.jpg"]],
         "itemExamples": [["https://i.imgur.com/NYv2mml.jpg"], ["https://i.imgur.com/CnzYGbQ.jpg"], ["https://i.imgur.com/Yq4lYa0.jpg"]],
         "imagesGrid": img_grid,
-        "gridIndices": list(range(10)),
+        "gridIndices": list(range(12)),
         "keywords": keywords,
         "imagesCandidates": candidates,
         "gridData": [{ "date": '2016-05-02', "name": 'Jack', "address": 'New York City' },
                      { "date": '2016-05-04', "name": 'Jack', "address": 'New York City' },
                      { "date": '2016-05-01', "name": 'Jack', "address": 'New York City' },
                      { "date": '2016-05-03', "name": 'Jack', "address": 'New York City' },
-                    ]
+                    ],
+        "currentLabelIndex": -1
+
     }
 
     #state
@@ -150,7 +159,6 @@ def main():
         "table": {},
         "selectedImageIndex": 0,
         "selectedKeywords": []
-
     }
 
     payload = {
@@ -162,6 +170,7 @@ def main():
     #http://192.168.1.42/apps/2/sessions/75
     #http://192.168.1.42/app/images/1/9/28/35?page=1&sessionId=75#image-31872
     jresp = api.task.set_data(task_id, payload)
+    utils.get_next_object(api, task_id)
 
 
 if __name__ == "__main__":

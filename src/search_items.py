@@ -1,8 +1,5 @@
 import os
-from fuzzywuzzy import fuzz
 from fuzzywuzzy import process as fuzzprocess
-import pandas as pd
-import numpy as np
 
 import supervisely_lib as sly
 import supervisely_lib.io.json as sly_json
@@ -18,10 +15,10 @@ search_query = ' '.join(search_keywords)
 
 project_id = api.task.get_data(task_id, "state.projectId")
 project_dir = os.path.join(sly.app.SHARED_DATA, "app_tagging", str(project_id))
-
 product_search = sly_json.load_json_file(os.path.join(project_dir, "product_search.json"))
+
 choices_dict = {idx: el for idx, el in enumerate(product_search)}
-results = fuzzprocess.extract(search_query, choices_dict, limit=10)
+results = fuzzprocess.extract(search_query, choices_dict, limit=12)
 
 gridIndices = []
 for result in results:
