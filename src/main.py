@@ -18,6 +18,7 @@ def read_items_csv(path):
     products = []
     images = []
     keywords = set()
+    product_search = []
     with open(path, mode='r') as csv_file:
         csv_reader = csv.DictReader(csv_file)
         for idx, row in enumerate(csv_reader):
@@ -32,12 +33,12 @@ def read_items_csv(path):
             sitename = "{0.netloc}".format(urlsplit(row["product_page"]))
             row["product_page"] = '<a href="{}" target="_blank">{}</a>'.format(row["product_page"], sitename)
 
-            row["search_string"] = "{} {} {}".format(row["Category"].lower(),
-                                                     row["Brand"].lower(),
-                                                     row["Item"].lower())
+            product_search.append("{} {} {}".format(row["Category"].lower(),
+                                                    row["Brand"].lower(),
+                                                    row["Item"].lower()))
 
     sly.logger.info("items count:", extra={"count": len(products)})
-    return products, images, keywords
+    return products, images, keywords, product_search
 
 
 def init_project(api: sly.Api, project_id):
@@ -95,7 +96,7 @@ def init_project(api: sly.Api, project_id):
 
 
 def main():
-    products, images, keywords_set = read_items_csv(ITEMS_PATH)
+    products, images, keywords_set, product_search = read_items_csv(ITEMS_PATH)
 
     keywords = []
     for item in keywords_set:
@@ -106,8 +107,8 @@ def main():
     api.add_additional_field('taskId', task_id)
     api.add_header('x-task-id', str(task_id))
 
-    context = api.task.get_data(task_id, sly.app.CONTEXT)
-    user_id = context["userId"]
+    #context = api.task.get_data(task_id, sly.app.CONTEXT)
+    #user_id = context["userId"]
 
     project_dir = init_project(api, PROJECT_ID)
 
@@ -116,13 +117,14 @@ def main():
 
     img_grid = []
     candidates = []
-    for img_url in images:
-        img_grid.append({"url": img_url, "label": sly.rand_str(65)})
+    for img_url, product in zip(images, products):
+        img_grid.append({"url": img_url, "label": product["Item"]})
         candidate = [[img_url], [img_url]]
         candidates.append(candidate)
 
     sly_json.dump_json_file(products, os.path.join(project_dir, "products.json"))
     sly_json.dump_json_file(images, os.path.join(project_dir, "images.json"))
+    sly_json.dump_json_file(product_search, os.path.join(project_dir, "product_search.json"))
 
     #data
     data = {
@@ -130,6 +132,7 @@ def main():
         "objectToTag": [["https://i.imgur.com/x1l0qca.jpg"], ["https://i.imgur.com/YbWG8xE.jpg"]],
         "itemExamples": [["https://i.imgur.com/NYv2mml.jpg"], ["https://i.imgur.com/CnzYGbQ.jpg"], ["https://i.imgur.com/Yq4lYa0.jpg"]],
         "imagesGrid": img_grid,
+        "gridIndices": list(range(10)),
         "keywords": keywords,
         "imagesCandidates": candidates,
         "gridData": [{ "date": '2016-05-02', "name": 'Jack', "address": 'New York City' },
@@ -163,3 +166,13 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+#@TODO: сделать нормальный warning button
+#@TODO: починить галерею - чтобы картинка вписывалась полностью а не только по ширине
+#@TODO: починить поиск по таблице
+#@TODO: починить выделение строки
+
+#@TODO: dockerfile
+# pip install fuzzywuzzy
+# pip install fuzzyset

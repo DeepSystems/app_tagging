@@ -1,6 +1,4 @@
 <div>
-
-    <!-- @TODO: add warning button -->
     <el-row :gutter="10">
         <el-col :span="8">
             <card style="margin-bottom:10px;" title="Item to tag" subtitle="Find product item for this image">
@@ -28,7 +26,7 @@
             <card style="margin-bottom:15px;" title="Search candidate product in database" subtitle="Use thumbnail or table view">
                 <div class="fflex">
                     <el-select
-                        v-model="state.selectedKeywords" multiple filterable allow-create="true" placeholder="Please enter a keyword" style="width: 100%; margin-right: 10px;">
+                        v-model="state.selectedKeywords" multiple filterable :allow-create="true" placeholder="Please enter a keyword" style="width: 100%; margin-right: 10px;">
                         <el-option
                           v-for="item in data.keywords"
                           :key="item.value"
@@ -44,12 +42,14 @@
                           <!--@#TODO: calc height here-->
                           <div style="max-height: 515px; overflow: auto;">
                                 <div style="float: left; margin: 1px; width: 200px; border: 3px solid transparent;"
-                                     :style="{ borderColor: state.selectedImageIndex === index ? '#20A0FF' : 'transparent' }" v-for="(item, index) in data.imagesGrid">
-                                    <img style="display: block; width: 100%; height: 150px; object-fit: contain; background: white;"
-                                         :src="item.url"
-                                         @click="state.selectedImageIndex = index"
-                                    />
-                                    <div v-if="item.label.length >= 15" style="text-align:center; word-wrap:break-word;">{{ item.label.substring(0,15)+".." }}</div>
+                                     :style="{ borderColor: state.selectedImageIndex === index ? '#20A0FF' : 'transparent' }" v-for="index in data.gridIndices">
+                                    <el-tooltip class="item" effect="dark" :content="data.imagesGrid[index].label" placement="top-start">
+                                        <img style="display: block; width: 100%; height: 150px; object-fit: contain; background: white;"
+                                             :src="data.imagesGrid[index].url"
+                                             @click="state.selectedImageIndex = index"
+                                        />
+                                    </el-tooltip>
+                                    <!--<div v-if="item.label.length >= 15" style="text-align:center; word-wrap:break-word;">{{ item.label.substring(0,15)+".." }}</div>-->
                                 </div>
 
 
@@ -65,7 +65,7 @@
     </el-row>
 
 
-    <!--<el-row>-->
-        <!--<card class="mt15" title="Debug state"><pre>{{state}}</pre></card>-->
-    <!--</el-row>-->
+    <el-row>
+        <card class="mt15" title="Debug state"><pre>{{state}}</pre></card>
+    </el-row>
 </div>
