@@ -5,7 +5,6 @@ import supervisely_lib as sly
 import supervisely_lib.io.json as sly_json
 
 SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
-
 task_info = sly_json.load_json_file(os.path.join(SCRIPT_DIR, "../task_config.json"))
 task_id = task_info["task_id"]
 server_address = task_info["server_address"]
