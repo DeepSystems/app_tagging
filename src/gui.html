@@ -1,6 +1,6 @@
 <div>
 
-
+    <!-- @TODO: add warning button -->
     <el-row :gutter="10">
         <el-col :span="8">
             <card style="margin-bottom:10px;" title="Item to tag" subtitle="Find product item for this image">
@@ -15,7 +15,9 @@
                     <!--<el-table-column width="300" property="address" label="address"></el-table-column>-->
                   <!--</el-table>-->
                 <!--</el-popover>-->
-                <div slot="header" class="fflex"> <el-button icon="circle-check" size="small">Tag</el-button></div>
+                <!--class="fflex"-->
+                <div slot="header"> <el-button icon="circle-check" type="primary" size="small">Tag</el-button></div>
+                <div slot="header"> <el-button icon="warning" type="danger" size="small">Unknown</el-button></div>
             </card>
             <card style="margin-bottom:10px;" title="Candidate product" subtitle="Images of selected candidate product">
                 <sly-gallery height="200px" :content="data.imagesCandidates[state.selectedImageIndex]"/>
@@ -43,7 +45,7 @@
                           <div style="max-height: 515px; overflow: auto;">
                                 <div style="float: left; margin: 1px; width: 200px; border: 3px solid transparent;"
                                      :style="{ borderColor: state.selectedImageIndex === index ? '#20A0FF' : 'transparent' }" v-for="(item, index) in data.imagesGrid">
-                                    <img style="display: block; width: 100%; height: 150px; object-fit: contain; background: #DCDCDC;"
+                                    <img style="display: block; width: 100%; height: 150px; object-fit: contain; background: white;"
                                          :src="item.url"
                                          @click="state.selectedImageIndex = index"
                                     />

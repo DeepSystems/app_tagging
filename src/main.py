@@ -2,18 +2,17 @@ import os
 import json
 import html
 import time
+from urllib.parse import urlsplit
 
 import csv
-from collections import defaultdict
 import supervisely_lib as sly
 import utils
 
-ITEMS_PATH = "/workdir/src/items.csv"
+ITEMS_PATH = "/workdir/src/products.csv"
 
 DEMO_IMAGES = []
 
 
-#examples http://www.grocery.com/open-grocery-database-project/
 def read_items_csv(path):
     products = []
     images = []
@@ -21,15 +20,21 @@ def read_items_csv(path):
         csv_reader = csv.DictReader(csv_file)
         for idx, row in enumerate(csv_reader):
             products.append(row)
+            images.append(row["image"])
+            row["image"] = '<a href="{}" target="_blank">{}</a>'.format(row["image"], "image")
+
+            sitename = "{0.netloc}".format(urlsplit(row["product_page"]))
+            row["product_page"] = '<a href="{}" target="_blank">{}</a>'.format(row["product_page"], sitename)
+
     #@TODO: table freezes page (110k)
     products = products[:100]
     sly.logger.info("items count:", extra={"count": len(products)})
 
-    return products
+    return products, images
 
 
 def main():
-    products = read_items_csv(ITEMS_PATH)
+    products, images = read_items_csv(ITEMS_PATH)
 
     task_id = int(os.getenv("TASK_ID"))
     api = sly.Api.from_env()
@@ -48,20 +53,20 @@ def main():
     with open('/workdir/src/gui.html', 'r') as file:
         gui_template = file.read()
 
-    images = ["https://i.imgur.com/x1l0qca.jpg", "https://i.imgur.com/YbWG8xE.jpg",
-              "https://i.imgur.com/NYv2mml.jpg", "https://i.imgur.com/CnzYGbQ.jpg",
-              "https://i.imgur.com/NYv2mml.jpg", "https://i.imgur.com/CnzYGbQ.jpg",
-              "https://i.imgur.com/x1l0qca.jpg", "https://i.imgur.com/YbWG8xE.jpg",
-              "https://i.imgur.com/x1l0qca.jpg", "https://i.imgur.com/YbWG8xE.jpg",
-              "https://i.imgur.com/x1l0qca.jpg", "https://i.imgur.com/YbWG8xE.jpg",
-              "https://i.imgur.com/NYv2mml.jpg", "https://i.imgur.com/CnzYGbQ.jpg",
-              "https://i.imgur.com/NYv2mml.jpg", "https://i.imgur.com/CnzYGbQ.jpg",
-              "https://i.imgur.com/x1l0qca.jpg", "https://i.imgur.com/YbWG8xE.jpg",
-              "https://i.imgur.com/x1l0qca.jpg", "https://i.imgur.com/YbWG8xE.jpg",
-              "https://i.imgur.com/x1l0qca.jpg", "https://i.imgur.com/YbWG8xE.jpg",
-              "https://i.imgur.com/NYv2mml.jpg", "https://i.imgur.com/CnzYGbQ.jpg",
-              "https://i.imgur.com/NYv2mml.jpg", "https://i.imgur.com/CnzYGbQ.jpg",
-              "https://i.imgur.com/Yq4lYa0.jpg"]
+    # images = ["https://i.imgur.com/x1l0qca.jpg", "https://i.imgur.com/YbWG8xE.jpg",
+    #           "https://i.imgur.com/NYv2mml.jpg", "https://i.imgur.com/CnzYGbQ.jpg",
+    #           "https://i.imgur.com/NYv2mml.jpg", "https://i.imgur.com/CnzYGbQ.jpg",
+    #           "https://i.imgur.com/x1l0qca.jpg", "https://i.imgur.com/YbWG8xE.jpg",
+    #           "https://i.imgur.com/x1l0qca.jpg", "https://i.imgur.com/YbWG8xE.jpg",
+    #           "https://i.imgur.com/x1l0qca.jpg", "https://i.imgur.com/YbWG8xE.jpg",
+    #           "https://i.imgur.com/NYv2mml.jpg", "https://i.imgur.com/CnzYGbQ.jpg",
+    #           "https://i.imgur.com/NYv2mml.jpg", "https://i.imgur.com/CnzYGbQ.jpg",
+    #           "https://i.imgur.com/x1l0qca.jpg", "https://i.imgur.com/YbWG8xE.jpg",
+    #           "https://i.imgur.com/x1l0qca.jpg", "https://i.imgur.com/YbWG8xE.jpg",
+    #           "https://i.imgur.com/x1l0qca.jpg", "https://i.imgur.com/YbWG8xE.jpg",
+    #           "https://i.imgur.com/NYv2mml.jpg", "https://i.imgur.com/CnzYGbQ.jpg",
+    #           "https://i.imgur.com/NYv2mml.jpg", "https://i.imgur.com/CnzYGbQ.jpg",
+    #           "https://i.imgur.com/Yq4lYa0.jpg"]
 
 
     img_grid = []
