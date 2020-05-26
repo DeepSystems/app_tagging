@@ -102,17 +102,18 @@ def init_project(api: sly.Api, project_id):
 
 
 def main():
-    task_info = sly_json.load_json_file(os.path.join(SCRIPT_DIR, "../task_config.json"))
-
     products, images, keywords_set, product_search = read_items_csv(ITEMS_PATH)
 
     keywords = []
     for item in keywords_set:
         keywords.append({"value": item})
 
+    task_info = sly_json.load_json_file(os.path.join(SCRIPT_DIR, "../task_config.json"))
+    task_id = task_info["task_id"]
+    server_address = task_info["server_address"]
+    api_token = task_info["api_token"]
 
-    task_id = int(os.getenv("TASK_ID"))
-    api = sly.Api.from_env()
+    api = sly.Api(server_address, api_token, retry_count=10)
     api.add_additional_field('taskId', task_id)
     api.add_header('x-task-id', str(task_id))
 
