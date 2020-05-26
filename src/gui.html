@@ -28,7 +28,7 @@
             <card style="margin-bottom:15px;" title="Search candidate product in database" subtitle="Use thumbnail or table view">
                 <div class="fflex">
                     <el-select
-                        v-model="state.selectedKeywords" multiple filterable placeholder="Please enter a keyword" style="width: 100%; margin-right: 10px;">
+                        v-model="state.selectedKeywords" multiple filterable allow-create="true" placeholder="Please enter a keyword" style="width: 100%; margin-right: 10px;">
                         <el-option
                           v-for="item in data.keywords"
                           :key="item.value"
@@ -59,7 +59,6 @@
                   <el-tab-pane label="Table">
                       <sly-table :options="{ perPage: state.perPage, pageSizes: state.pageSizes }" :content="data.table" v-model="state.table"></sly-table>
                   </el-tab-pane>
-                  <el-tab-pane label="Statistics">General + Per user stats</el-tab-pane>
                 </el-tabs>
             </card>
         </el-col>
