@@ -10,7 +10,7 @@ import supervisely_lib as sly
 import supervisely_lib.io.json as sly_json
 import utils
 
-ITEMS_PATH = "/workdir/src/products.csv"
+ITEMS_PATH = "products.csv"
 PROJECT_ID = 29
 
 
@@ -119,7 +119,7 @@ def main():
 
     project_dir = init_project(api, PROJECT_ID)
 
-    with open('/workdir/src/gui.html', 'r') as file:
+    with open('gui.html', 'r') as file:
         gui_template = file.read()
 
     img_grid = []
