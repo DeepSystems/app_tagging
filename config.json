@@ -1,0 +1,6 @@
+{
+	"name": "Retail tagging",
+	"description": "For tagging products on retail shelves",
+	"init_script": "src/main.py",
+	"docker_image": "docker.deepsystems.io/supervisely/five/python-runner:import_alpha_images"
+}
