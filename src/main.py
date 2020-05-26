@@ -1,8 +1,4 @@
 import os
-import json
-import html
-import time
-import pickle
 from urllib.parse import urlsplit
 
 import csv
@@ -10,8 +6,11 @@ import supervisely_lib as sly
 import supervisely_lib.io.json as sly_json
 import utils
 
-ITEMS_PATH = "products.csv"
 PROJECT_ID = 29
+
+
+SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
+ITEMS_PATH = os.path.join(SCRIPT_DIR, "products.csv")
 
 
 def read_items_csv(path):
