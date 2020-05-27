@@ -3,8 +3,8 @@
         <el-col :span="7">
             <card style="margin-bottom:10px; height:700px;" title="Item to tag" subtitle="Find product item for this image">
                 <sly-gallery :content="data.objectToTag"/>
-                <div slot="header"> <el-button icon="circle-check" type="primary" size="small" @click="command('src/tag_and_next.py')">Tag</el-button></div>
-                <div slot="header"> <el-button icon="warning" type="danger" size="small">Unknown</el-button></div>
+                <div slot="header"> <el-button icon="circle-check" type="primary" size="small" :loading="state.tagging" @click="state.tagging=true; command('src/tag_and_next.py')">Tag</el-button></div>
+                <div slot="header"> <el-button icon="warning" type="danger" size="small" :loading="state.tagging" @click="state.tagging=true; command('src/mark_unknown_item.py')">Unknown</el-button></div>
             </card>
 
         </el-col>
@@ -26,13 +26,13 @@
                           :value="item.value">
                         </el-option>
                     </el-select>
-                    <el-button icon="search" size="small" @click="command('src/search_items.py')"></el-button>
+                    <el-button icon="search" size="small" :loading="state.searching" @click="state.searching=true; command('src/search_items.py')"></el-button>
                 </div>
                 <el-tabs type="border-card" style="margin-top: 10px;">
                   <el-tab-pane label="Thumbnails">
                       <el-row>
                           <!--@#TODO: calc height here-->
-                          <div style="max-height: 680px; overflow: auto;">
+                          <div style="overflow: auto;">
                                 <div style="float: left; margin: 1px; width: 120px; border: 3px solid transparent;"
                                      :style="{ borderColor: state.selectedImageIndex === index ? '#20A0FF' : 'transparent' }" v-for="index in data.gridIndices">
                                     <el-tooltip class="item" effect="dark" :content="data.imagesGrid[index].label" placement="top-start">
@@ -54,6 +54,12 @@
         </el-col>
     </el-row>
 
+    <el-row>
+        <el-tabs type="border-card">
+          <el-tab-pane label="Stats">User</el-tab-pane>
+          <el-tab-pane label="Settings">Config</el-tab-pane>
+        </el-tabs>
+    </el-row>
 
     <el-row>
         <card class="mt15" title="Debug state"><pre>{{state}}</pre></card>

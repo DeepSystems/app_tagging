@@ -44,11 +44,12 @@ def get_next_object(api, task_id):
 
     canvas = image.copy()
     label.draw_contour(canvas, thickness=3)
+    pad = 150
     rect_context = sly.Rectangle(
-        max(0, rect.top - 50),
-        max(0, rect.left - 50),
-        min(image.shape[0]-1, rect.bottom + 50),
-        min(image.shape[1]-1, rect.right + 50)
+        max(0, rect.top - pad),
+        max(0, rect.left - pad),
+        min(image.shape[0]-1, rect.bottom + pad),
+        min(image.shape[1]-1, rect.right + pad)
     )
 
     cropped_context = sly.image.crop(canvas, rect_context)

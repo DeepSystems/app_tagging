@@ -1,3 +1,6 @@
+import time
+_start = time.time()
+
 import os
 from urllib.parse import urlsplit
 
@@ -142,7 +145,7 @@ def main():
         "objectToTag": [["https://i.imgur.com/x1l0qca.jpg"], ["https://i.imgur.com/YbWG8xE.jpg"]],
         "itemExamples": [["https://i.imgur.com/NYv2mml.jpg"], ["https://i.imgur.com/CnzYGbQ.jpg"], ["https://i.imgur.com/Yq4lYa0.jpg"]],
         "imagesGrid": img_grid,
-        "gridIndices": list(range(12)),
+        "gridIndices": list(range(min(30, len(img_grid)))),
         "keywords": keywords,
         "imagesCandidates": candidates,
         "gridData": [{ "date": '2016-05-02', "name": 'Jack', "address": 'New York City' },
@@ -161,7 +164,9 @@ def main():
         "pageSizes": [10, 15, 20, 50, 100],
         "table": {},
         "selectedImageIndex": 0,
-        "selectedKeywords": []
+        "selectedKeywords": [],
+        "searching": False,
+        "tagging": False,
     }
 
     payload = {
@@ -178,6 +183,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+    sly.logger.info("SCRIPT_TIME: {} sec".format(time.time() - _start))
 
 
 #@TODO: сделать нормальный warning button
@@ -185,6 +191,14 @@ if __name__ == "__main__":
 #@TODO: починить поиск по таблице
 #@TODO: починить выделение строки
 
-#@TODO: dockerfile
-# pip install fuzzywuzzy
-# pip install fuzzyset
+#@TODO:
+# прогресс аннотации
+# сделать лоудинги на кнопку
+# поправить верстку грид и табы
+# добавить статистику по проаннотированным данным
+# починить галерею
+# отпрофилировать
+# реализовать кнопку unknown
+# автообновление фигур в кликере
+# настройки: какие теги добавлять, сколько брать окрестность в пикселях
+# finish labeling

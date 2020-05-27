@@ -22,12 +22,13 @@ project_dir = os.path.join(sly.app.SHARED_DATA, "app_tagging", str(project_id))
 product_search = sly_json.load_json_file(os.path.join(project_dir, "product_search.json"))
 
 choices_dict = {idx: el for idx, el in enumerate(product_search)}
-results = fuzzprocess.extract(search_query, choices_dict, limit=12)
+results = fuzzprocess.extract(search_query, choices_dict, limit=max(30, len(product_search)))
 
 gridIndices = []
 for result in results:
     gridIndices.append(result[2])
 
 api.task.set_data(task_id, gridIndices, "data.gridIndices")
+api.task.set_data(task_id, False, "state.searching")
 
 
