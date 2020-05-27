@@ -73,4 +73,4 @@ def get_next_object(api, task_id, project_id):
     cropped_context = sly.image.crop(canvas, rect_context)
     cropped_url, cropped_context_url = pack_images(cropped_image, cropped_context)
 
-    api.task.set_data(task_id, [[cropped_url], [cropped_context_url]], "data.objectToTag")
+    api.task.set_data(task_id, [[cropped_context_url], [cropped_url]], "data.objectToTag")
