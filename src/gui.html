@@ -10,7 +10,7 @@
         </el-col>
         <el-col :span="7">
             <card style="margin-bottom:10px; height:700px;" title="Candidate product" subtitle="Images of selected candidate product">
-                <sly-gallery :content="data.imagesCandidates[state.selectedImageIndex]"/>
+                <sly-gallery :content="data.imagesGrid[state.selectedImageIndex].gallery"/>
             </card>
         </el-col>
         <el-col :span="10">

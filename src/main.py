@@ -9,16 +9,15 @@ import supervisely_lib as sly
 import supervisely_lib.io.json as sly_json
 import utils
 
-PROJECT_ID = 29
-
 
 SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
 ITEMS_PATH = os.path.join(SCRIPT_DIR, "products.csv")
 
 
+@sly.ptimer
 def read_items_csv(path):
     products = []
-    images = []
+    product_images = []
     keywords = set()
     product_search = []
     with open(path, mode='r') as csv_file:
@@ -29,7 +28,7 @@ def read_items_csv(path):
             keywords.add(row["Brand"].lower())
             keywords.add(row["Item"].lower())
 
-            images.append(row["image"])
+            product_images.append(row["image"])
             row["image"] = '<a href="{}" target="_blank">{}</a>'.format(row["image"], "image")
 
             sitename = "{0.netloc}".format(urlsplit(row["product_page"]))
@@ -38,11 +37,15 @@ def read_items_csv(path):
             product_search.append("{} {} {}".format(row["Category"].lower(),
                                                     row["Brand"].lower(),
                                                     row["Item"].lower()))
+    keywords_list = []
+    for item in keywords:
+        keywords_list.append({"value": item})
 
     sly.logger.info("items count:", extra={"count": len(products)})
-    return products, images, keywords, product_search
+    return products, keywords_list, product_search, product_images
 
 
+@sly.ptimer
 def init_project(api: sly.Api, project_id):
     project_dir = os.path.join(sly.app.SHARED_DATA, "app_tagging", str(project_id))
 
@@ -104,45 +107,27 @@ def init_project(api: sly.Api, project_id):
     return project_dir
 
 
+@sly.ptimer
+def build_image_grid_database(products):
+    img_grid = []
+    for product in products:
+        img_url = product["image"]
+        img_grid.append({"url": img_url, "label": product["Item"], "gallery": [[img_url], [img_url]]})
+    return img_grid
+
+
 def main():
-    _local_start = time.time()
-    products, images, keywords_set, product_search = read_items_csv(ITEMS_PATH)
-    keywords = []
-    for item in keywords_set:
-        keywords.append({"value": item})
-    sly.logger.debug("TIME_READ_DB: {} sec".format(time.time() - _local_start))
+    task_id, api, project_id = utils.get_task_api()
+    products, keywords, product_search, product_images = read_items_csv(ITEMS_PATH)
 
-    _local_start = time.time()
-    task_info = sly_json.load_json_file(os.path.join(SCRIPT_DIR, "../task_config.json"))
-    task_id = task_info["task_id"]
-    server_address = task_info["server_address"]
-    api_token = task_info["api_token"]
+    project_dir = init_project(api, project_id)
 
-    api = sly.Api(server_address, api_token, retry_count=10)
-    api.add_additional_field('taskId', task_id)
-    api.add_header('x-task-id', str(task_id))
-    sly.logger.debug("TIME_INIT_TASK: {} sec".format(time.time() - _local_start))
-
-    #context = api.task.get_data(task_id, sly.app.CONTEXT)
-    #user_id = context["userId"]
-
-    _local_start = time.time()
-    project_dir = init_project(api, PROJECT_ID)
-    sly.logger.debug("TIME_INIT_PROJECT: {} sec".format(time.time() - _local_start))
-
-    _local_start = time.time()
     with open(os.path.join(SCRIPT_DIR, 'gui.html'), 'r') as file:
         gui_template = file.read()
 
-    img_grid = []
-    candidates = []
-    for img_url, product in zip(images, products):
-        img_grid.append({"url": img_url, "label": product["Item"]})
-        candidate = [[img_url], [img_url]]
-        candidates.append(candidate)
-
+    img_grid = build_image_grid_database(products)
     sly_json.dump_json_file(products, os.path.join(project_dir, "products.json"))
-    sly_json.dump_json_file(images, os.path.join(project_dir, "images.json"))
+    sly_json.dump_json_file(img_grid, os.path.join(project_dir, "img_grid.json"))
     sly_json.dump_json_file(product_search, os.path.join(project_dir, "product_search.json"))
 
     #data
@@ -153,7 +138,6 @@ def main():
         "imagesGrid": img_grid,
         "gridIndices": list(range(min(30, len(img_grid)))),
         "keywords": keywords,
-        "imagesCandidates": candidates,
         "gridData": [{ "date": '2016-05-02', "name": 'Jack', "address": 'New York City' },
                      { "date": '2016-05-04', "name": 'Jack', "address": 'New York City' },
                      { "date": '2016-05-01', "name": 'Jack', "address": 'New York City' },
@@ -165,7 +149,7 @@ def main():
 
     #state
     state = {
-        "projectId": PROJECT_ID,
+        "projectId": project_id,
         "perPage": 20,
         "pageSizes": [10, 15, 20, 50, 100],
         "table": {},
@@ -174,7 +158,6 @@ def main():
         "searching": False,
         "tagging": False,
     }
-    sly.logger.debug("TIME_INIT_TSD: {} sec".format(time.time() - _local_start))
 
     payload = {
         sly.app.TEMPLATE: gui_template,
@@ -182,15 +165,10 @@ def main():
         sly.app.DATA: data,
     }
 
-    _local_start = time.time()
     #http://192.168.1.42/apps/2/sessions/75
     #http://192.168.1.42/app/images/1/9/28/35?page=1&sessionId=75#image-31872
     jresp = api.task.set_data(task_id, payload)
-    sly.logger.debug("TIME_SEND_TSD: {} sec".format(time.time() - _local_start))
-
-    _local_start = time.time()
     utils.get_next_object(api, task_id)
-    sly.logger.debug("PREPARE_ITEM: {} sec".format(time.time() - _local_start))
 
 
 if __name__ == "__main__":
@@ -203,6 +181,10 @@ if __name__ == "__main__":
 #@TODO: починить выделение строки
 
 #@TODO:
+# DEN: как скрыть некоторые колонки из таблицы
+# поиск по табличке с выделение строчек?
+# DEN добавить запуск приложения в контекстное меню
+# автообновление шаблона
 # прогресс аннотации
 # поправить верстку грид и табы
 # добавить статистику по проаннотированным данным
