@@ -108,10 +108,9 @@ def init_project(api: sly.Api, project_id):
 
 
 @sly.ptimer
-def build_image_grid_database(products):
+def build_image_grid_database(products, product_images):
     img_grid = []
-    for product in products:
-        img_url = product["image"]
+    for product, img_url in zip(products, product_images):
         img_grid.append({"url": img_url, "label": product["Item"], "gallery": [[img_url], [img_url]]})
     return img_grid
 
@@ -125,7 +124,7 @@ def main():
     with open(os.path.join(SCRIPT_DIR, 'gui.html'), 'r') as file:
         gui_template = file.read()
 
-    img_grid = build_image_grid_database(products)
+    img_grid = build_image_grid_database(products, product_images)
     sly_json.dump_json_file(products, os.path.join(project_dir, "products.json"))
     sly_json.dump_json_file(img_grid, os.path.join(project_dir, "img_grid.json"))
     sly_json.dump_json_file(product_search, os.path.join(project_dir, "product_search.json"))
@@ -133,8 +132,8 @@ def main():
     #data
     data = {
         "table": products,
-        "objectToTag": [["https://i.imgur.com/x1l0qca.jpg"], ["https://i.imgur.com/YbWG8xE.jpg"]],
-        "itemExamples": [["https://i.imgur.com/NYv2mml.jpg"], ["https://i.imgur.com/CnzYGbQ.jpg"], ["https://i.imgur.com/Yq4lYa0.jpg"]],
+        "objectToTag": [],
+        "itemExamples": [],
         "imagesGrid": img_grid,
         "gridIndices": list(range(min(30, len(img_grid)))),
         "keywords": keywords,
