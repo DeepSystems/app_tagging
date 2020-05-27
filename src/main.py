@@ -105,12 +105,14 @@ def init_project(api: sly.Api, project_id):
 
 
 def main():
+    _local_start = time.time()
     products, images, keywords_set, product_search = read_items_csv(ITEMS_PATH)
-
     keywords = []
     for item in keywords_set:
         keywords.append({"value": item})
+    sly.logger.debug("TIME_READ_DB: {} sec".format(time.time() - _local_start))
 
+    _local_start = time.time()
     task_info = sly_json.load_json_file(os.path.join(SCRIPT_DIR, "../task_config.json"))
     task_id = task_info["task_id"]
     server_address = task_info["server_address"]
@@ -119,12 +121,16 @@ def main():
     api = sly.Api(server_address, api_token, retry_count=10)
     api.add_additional_field('taskId', task_id)
     api.add_header('x-task-id', str(task_id))
+    sly.logger.debug("TIME_INIT_TASK: {} sec".format(time.time() - _local_start))
 
     #context = api.task.get_data(task_id, sly.app.CONTEXT)
     #user_id = context["userId"]
 
+    _local_start = time.time()
     project_dir = init_project(api, PROJECT_ID)
+    sly.logger.debug("TIME_INIT_PROJECT: {} sec".format(time.time() - _local_start))
 
+    _local_start = time.time()
     with open(os.path.join(SCRIPT_DIR, 'gui.html'), 'r') as file:
         gui_template = file.read()
 
@@ -168,6 +174,7 @@ def main():
         "searching": False,
         "tagging": False,
     }
+    sly.logger.debug("TIME_INIT_TSD: {} sec".format(time.time() - _local_start))
 
     payload = {
         sly.app.TEMPLATE: gui_template,
@@ -175,10 +182,15 @@ def main():
         sly.app.DATA: data,
     }
 
+    _local_start = time.time()
     #http://192.168.1.42/apps/2/sessions/75
     #http://192.168.1.42/app/images/1/9/28/35?page=1&sessionId=75#image-31872
     jresp = api.task.set_data(task_id, payload)
+    sly.logger.debug("TIME_SEND_TSD: {} sec".format(time.time() - _local_start))
+
+    _local_start = time.time()
     utils.get_next_object(api, task_id)
+    sly.logger.debug("PREPARE_ITEM: {} sec".format(time.time() - _local_start))
 
 
 if __name__ == "__main__":
@@ -186,19 +198,16 @@ if __name__ == "__main__":
     sly.logger.info("SCRIPT_TIME: {} sec".format(time.time() - _start))
 
 
-#@TODO: сделать нормальный warning button
 #@TODO: починить галерею - чтобы картинка вписывалась полностью а не только по ширине
 #@TODO: починить поиск по таблице
 #@TODO: починить выделение строки
 
 #@TODO:
 # прогресс аннотации
-# сделать лоудинги на кнопку
 # поправить верстку грид и табы
 # добавить статистику по проаннотированным данным
 # починить галерею
 # отпрофилировать
-# реализовать кнопку unknown
 # автообновление фигур в кликере
 # настройки: какие теги добавлять, сколько брать окрестность в пикселях
 # finish labeling
