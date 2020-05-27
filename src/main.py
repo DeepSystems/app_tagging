@@ -48,7 +48,7 @@ def init_project(api: sly.Api, project_id):
     project_dir = os.path.join(sly.app.SHARED_DATA, "app_tagging", str(project_id))
 
     #@TODO: comment
-    #sly.fs.remove_dir(project_dir)
+    sly.fs.remove_dir(project_dir)
 
     if sly.fs.dir_exists(project_dir):
         return project_dir
