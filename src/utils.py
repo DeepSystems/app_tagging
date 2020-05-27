@@ -1,6 +1,7 @@
 import os
 import supervisely_lib as sly
 import supervisely_lib.io.json as sly_json
+import time
 
 
 def get_task_api():
@@ -17,9 +18,14 @@ def get_task_api():
     # user_id = context["userId"]
     return task_id, api, PROJECT_ID
 
+@sly.ptimer
+def pack_images(cropped_image, cropped_context):
+    cropped_url = sly.image.np_image_to_data_url(cropped_image)
+    cropped_context_url = sly.image.np_image_to_data_url(cropped_context)
+    return cropped_url, cropped_context_url
 
-def get_next_object(api, task_id):
-    project_id = api.task.get_data(task_id, "state.projectId")
+@sly.ptimer
+def get_next_object(api, task_id, project_id):
     project_dir = os.path.join(sly.app.SHARED_DATA, "app_tagging", str(project_id))
 
     image_labels = sly_json.load_json_file(os.path.join(project_dir, "image_labels_pairs.json"))
@@ -53,7 +59,9 @@ def get_next_object(api, task_id):
     cropped_image = sly.image.crop(image, label.geometry.to_bbox())
 
     canvas = image.copy()
+
     label.draw_contour(canvas, thickness=3)
+
     pad = 150
     rect_context = sly.Rectangle(
         max(0, rect.top - pad),
@@ -63,8 +71,6 @@ def get_next_object(api, task_id):
     )
 
     cropped_context = sly.image.crop(canvas, rect_context)
+    cropped_url, cropped_context_url = pack_images(cropped_image, cropped_context)
 
-    cropped_url = sly.image.np_image_to_data_url(cropped_image)
-    cropped_context = sly.image.np_image_to_data_url(cropped_context)
-
-    api.task.set_data(task_id, [[cropped_url], [cropped_context]], "data.objectToTag")
+    api.task.set_data(task_id, [[cropped_url], [cropped_context_url]], "data.objectToTag")

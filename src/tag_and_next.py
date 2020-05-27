@@ -1,20 +1,14 @@
+import time
+_start = time.time()
+
 import os
 import supervisely_lib as sly
 import supervisely_lib.io.json as sly_json
 import utils
 
-SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
-task_info = sly_json.load_json_file(os.path.join(SCRIPT_DIR, "../task_config.json"))
-task_id = task_info["task_id"]
-server_address = task_info["server_address"]
-api_token = task_info["api_token"]
-api = sly.Api(server_address, api_token, retry_count=10)
-api.add_additional_field('taskId', task_id)
-api.add_header('x-task-id', str(task_id))
+task_id, api, project_id = utils.get_task_api()
 
 #tag here
-
-project_id = api.task.get_data(task_id, "state.projectId")
 project_dir = os.path.join(sly.app.SHARED_DATA, "app_tagging", str(project_id))
 image_labels = sly_json.load_json_file(os.path.join(project_dir, "image_labels_pairs.json"))
 free_pairs = sly_json.load_json_file(os.path.join(project_dir, "free_pairs.json"))
@@ -39,7 +33,6 @@ category_tm = meta.get_tag_meta("category")
 brand_tm = meta.get_tag_meta("brand")
 item_name_tm = meta.get_tag_meta("item_name")
 
-
 selectedImageIndex = api.task.get_data(task_id, "state.selectedImageIndex")
 product = sly_json.load_json_file(os.path.join(project_dir, "products.json"))[selectedImageIndex]
 print(product)
@@ -61,6 +54,6 @@ sly_json.dump_json_file(ann.to_json(), ann_path)
 free_pairs.pop(0)
 sly_json.dump_json_file(free_pairs, os.path.join(project_dir, "free_pairs.json"))
 
-utils.get_next_object(api, task_id)
+utils.get_next_object(api, task_id, project_id)
 api.task.set_data(task_id, False, "state.tagging")
-
+sly.logger.info("SCRIPT_TIME {}: {} sec".format(os.path.basename(__file__), time.time() - _start))

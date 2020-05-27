@@ -1,9 +1,7 @@
 import time
 _start = time.time()
-
 import os
 from urllib.parse import urlsplit
-
 import csv
 import supervisely_lib as sly
 import supervisely_lib.io.json as sly_json
@@ -50,10 +48,10 @@ def init_project(api: sly.Api, project_id):
     project_dir = os.path.join(sly.app.SHARED_DATA, "app_tagging", str(project_id))
 
     #@TODO: comment
-    sly.fs.remove_dir(project_dir)
+    #sly.fs.remove_dir(project_dir)
 
     if sly.fs.dir_exists(project_dir):
-        return
+        return project_dir
     else:
         sly.fs.mkdir(project_dir)
 
@@ -125,6 +123,7 @@ def main():
         gui_template = file.read()
 
     img_grid = build_image_grid_database(products, product_images)
+
     sly_json.dump_json_file(products, os.path.join(project_dir, "products.json"))
     sly_json.dump_json_file(img_grid, os.path.join(project_dir, "img_grid.json"))
     sly_json.dump_json_file(product_search, os.path.join(project_dir, "product_search.json"))
@@ -166,19 +165,19 @@ def main():
 
     #http://192.168.1.42/apps/2/sessions/75
     #http://192.168.1.42/app/images/1/9/28/35?page=1&sessionId=75#image-31872
+
     jresp = api.task.set_data(task_id, payload)
-    utils.get_next_object(api, task_id)
+    utils.get_next_object(api, task_id, project_id)
 
 
 if __name__ == "__main__":
     main()
-    sly.logger.info("SCRIPT_TIME: {} sec".format(time.time() - _start))
+    sly.logger.info("SCRIPT_TIME {}: {} sec".format(os.path.basename(__file__), time.time() - _start))
 
 
 #@TODO: починить галерею - чтобы картинка вписывалась полностью а не только по ширине
 #@TODO: починить поиск по таблице
 #@TODO: починить выделение строки
-
 #@TODO:
 # DEN: как скрыть некоторые колонки из таблицы
 # поиск по табличке с выделение строчек?
