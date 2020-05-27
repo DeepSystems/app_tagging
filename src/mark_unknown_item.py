@@ -32,6 +32,11 @@ new_label = labels[label_index].add_tags([
     sly.Tag(product_id_tm, "unknown"),
 ])
 
+labels[label_index] = new_label
+ann = ann.clone(labels=labels)
+
+api.annotation.upload_ann(image_id, ann)
+sly_json.dump_json_file(ann.to_json(), ann_path)
 
 free_pairs.pop(0)
 sly_json.dump_json_file(free_pairs, os.path.join(project_dir, "free_pairs.json"))
