@@ -36,7 +36,7 @@
                                 <div style="float: left; margin: 1px; width: 120px; border: 3px solid transparent;"
                                      :style="{ borderColor: state.selectedImageIndex === index ? '#20A0FF' : 'transparent' }" v-for="index in data.gridIndices">
                                     <el-tooltip class="item" effect="dark" :content="data.imagesGrid[index].label" placement="top-start">
-                                        <img style="display: block; width: 100%; height: 300px; object-fit: contain; background: white;"
+                                        <img style="display: block; width: 100%; height: 100px; object-fit: contain; background: white;"
                                              :src="data.imagesGrid[index].url"
                                              @click="state.selectedImageIndex = index"
                                         />
