@@ -5,7 +5,7 @@ import time
 
 
 def get_task_api():
-    PROJECT_ID = 29
+    PROJECT_ID = 489
     SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
     task_info = sly_json.load_json_file(os.path.join(SCRIPT_DIR, "../task_config.json"))
     task_id = task_info["task_id"]

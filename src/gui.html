@@ -9,7 +9,7 @@
 
         </el-col>
         <el-col :span="7">
-            <card style="margin-bottom:10px; height:700px;" title="Candidate product" subtitle="Images of selected candidate product">
+            <card style="margin-bottom:10px; height:700px;" id="preview" title="Candidate product" subtitle="Images of selected candidate product">
                 <sly-gallery :content="data.imagesGrid[state.selectedImageIndex].gallery"/>
             </card>
         </el-col>
@@ -36,7 +36,7 @@
                                 <div style="float: left; margin: 1px; width: 120px; border: 3px solid transparent;"
                                      :style="{ borderColor: state.selectedImageIndex === index ? '#20A0FF' : 'transparent' }" v-for="index in data.gridIndices">
                                     <el-tooltip class="item" effect="dark" :content="data.imagesGrid[index].label" placement="top-start">
-                                        <img style="display: block; width: 100%; height: 100px; object-fit: contain; background: white;"
+                                        <img style="display: block; width: 100%; height: 300px; object-fit: contain; background: white;"
                                              :src="data.imagesGrid[index].url"
                                              @click="state.selectedImageIndex = index"
                                         />
